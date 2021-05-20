@@ -11,9 +11,9 @@ services:
 
   mmbasket:
     image: ${DOCKER_REGISTRY-}mmbasket
-    build:
-      context: .
-      dockerfile: MMBasket/Dockerfile
+#    build:
+#      context: .
+#      dockerfile: MMBasket/Dockerfile
     ports:
       - 5003:80
     depends_on:
@@ -45,5 +45,5 @@ services:
       context: .
       dockerfile: MMGateway/Dockerfile
     ports:
-      - 5005:80
-      - 8000:443
+      - 8000:80
+      - 8010:443
