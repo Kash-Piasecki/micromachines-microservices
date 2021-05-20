@@ -39,11 +39,11 @@ services:
     depends_on:
       - db
         
-#  mmgateway:
-#    image: ${DOCKER_REGISTRY-}mmgateway
-#    build:
-#      context: .
-#      dockerfile: MMGateway/Dockerfile
-#    ports:
-#      - 5005:80
-#      - 8000:443
+  mmgateway:
+    image: ${DOCKER_REGISTRY-}mmgateway
+    build:
+      context: .
+      dockerfile: MMGateway/Dockerfile
+    ports:
+      - 5005:80
+      - 8000:443
