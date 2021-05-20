@@ -33,6 +33,54 @@
       ],
       "UpstreamPathTemplate": "/Gateway/Products/{id}",
       "UpstreamHttpMethod": [ "Get", "Put", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Users",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "mmusers",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Gateway/Users",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Users/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "mmusers",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Gateway/Users/{id}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Basket",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "mmbasket",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Gateway/Basket",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/Basket/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "mmbasket",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/Gateway/Basket/{id}",
+      "UpstreamHttpMethod": [ "Get" ]
     }
   ],
   "GlobalConfiguration": {
