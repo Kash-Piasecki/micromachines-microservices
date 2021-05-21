@@ -35,6 +35,7 @@ namespace MMStock
             services.AddMassTransit(config =>
             {
                 config.AddConsumer<ProductCreationConsumer>();
+                config.AddConsumer<BasketUpdateConsumer>();
                 config.UsingRabbitMq((ctx, cfg) =>
                 {
                     cfg.Host(Configuration["EventBusSettings:HostAddress"]);
@@ -42,11 +43,16 @@ namespace MMStock
                     {
                         c.ConfigureConsumer<ProductCreationConsumer>(ctx);
                     });
+                    cfg.ReceiveEndpoint(EventBusConstants.BasketUpdateEvent, c =>
+                    {
+                        c.ConfigureConsumer<BasketUpdateConsumer>(ctx);
+                    });
                 });
             });
             services.AddMassTransitHostedService();
 
             services.AddScoped<ProductCreationConsumer>();
+            services.AddScoped<BasketUpdateConsumer>();
             
             services.AddDbContext<StockContext>(options => options
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),

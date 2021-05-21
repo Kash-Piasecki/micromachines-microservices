@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommonLibrary.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +32,7 @@ namespace MMBasket
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // HTTPClient configuration
             services.AddHttpClient<ProductsClient>(client =>
             {
                 client.BaseAddress = new Uri("http://mmproducts/");
@@ -38,6 +41,18 @@ namespace MMBasket
             {
                 client.BaseAddress = new Uri("http://mmusers/");
             });
+            
+            // MassTransit configuration
+            services.AddMassTransit(config =>
+            {
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(Configuration["EventBusSettings:HostAddress"]);
+                });
+            });
+            services.AddMassTransitHostedService();
+            
+            // Docker mssql db
             services.AddDbContext<BasketContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),

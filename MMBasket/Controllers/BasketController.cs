@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CommonLibrary.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using MMBasket.Clients;
 using MMBasket.Data;
@@ -14,13 +16,15 @@ namespace MMBasket.Controllers
         private readonly IBasketRepository _basketRepository;
         private readonly ProductsClient _productsClient;
         private readonly UsersClient _usersClient;
+        private readonly IPublishEndpoint _publishEndpoint;
 
         public BasketController(IBasketRepository basketRepository, ProductsClient productsClient,
-            UsersClient usersClient)
+            UsersClient usersClient, IPublishEndpoint publishEndpoint)
         {
             _basketRepository = basketRepository;
             _productsClient = productsClient;
             _usersClient = usersClient;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet("{userId:Guid}")]
@@ -58,6 +62,12 @@ namespace MMBasket.Controllers
                 _basketRepository.Edit(basket);
             }
 
+            var basketUpdateEvent = new BasketUpdateEvent()
+            {
+                ProductId = basketCreateDto.ProductId,
+                Quantity = basketCreateDto.Quantity
+            };
+            await _publishEndpoint.Publish(basketUpdateEvent);
             var baskets = _basketRepository.GetAll(x => x.UserId == basketCreateDto.UserId && x.IsDone == false);
             var user = await _usersClient.GetUser(basketCreateDto.UserId);
             var productsList = await _productsClient.GetProductsList();

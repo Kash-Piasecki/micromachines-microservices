@@ -11,9 +11,9 @@ services:
 
   mmbasket:
     image: ${DOCKER_REGISTRY-}mmbasket
-#    build:
-#      context: .
-#      dockerfile: MMBasket/Dockerfile
+    build:
+      context: .
+      dockerfile: MMBasket/Dockerfile
     ports:
       - 5003:80
     depends_on:

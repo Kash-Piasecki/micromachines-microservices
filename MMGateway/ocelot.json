@@ -44,7 +44,7 @@
         }
       ],
       "UpstreamPathTemplate": "/Gateway/Users",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get", "Post" ]
     },
     {
       "DownstreamPathTemplate": "/Users/{id}",
