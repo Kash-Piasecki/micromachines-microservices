@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using CommonLibrary.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using MMProducts.Data;
 using MMProducts.Services;
+using Newtonsoft.Json;
 
 namespace MMProducts.Controllers
 {
@@ -12,10 +16,12 @@ namespace MMProducts.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductsRepository _productsRepository;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public ProductsController(IProductsRepository productsRepository)
+        public ProductsController(IProductsRepository productsRepository, IPublishEndpoint publishEndpoint)
         {
             _productsRepository = productsRepository;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet]
@@ -32,9 +38,16 @@ namespace MMProducts.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ProductReadDto> Create([FromBody] ProductUpsertDto productUpsertDto)
+        public async Task<ActionResult<ProductReadDto>> Create([FromBody] ProductUpsertDto productUpsertDto)
         {
             var product = productUpsertDto.AsProduct();
+            var productCreationEvent = new ProductCreationEvent()
+            {
+                ProductId = product.Id,
+                Name = product.Name,
+                Price = product.Price
+            };
+            await _publishEndpoint.Publish(productCreationEvent);
             return Ok(_productsRepository.Add(product).AsDto());
         }
 

@@ -7,11 +7,11 @@ namespace CommonLibrary.Events
         public Guid Id { get; set; }
         public DateTime CreationDate { get; set; }
 
-        public IntegrationBaseEvent(Guid id, DateTime creationDate)
-        {
-            Id = id;
-            CreationDate = creationDate;
-        }
+        // public IntegrationBaseEvent(Guid id, DateTime creationDate)
+        // {
+        //     Id = id;
+        //     CreationDate = creationDate;
+        // }
 
         public IntegrationBaseEvent()
         {

@@ -11,9 +11,9 @@ services:
 
   mmbasket:
     image: ${DOCKER_REGISTRY-}mmbasket
-    build:
-      context: .
-      dockerfile: MMBasket/Dockerfile
+#    build:
+#      context: .
+#      dockerfile: MMBasket/Dockerfile
     ports:
       - 5003:80
     depends_on:
@@ -31,9 +31,9 @@ services:
 
   mmusers:
     image: ${DOCKER_REGISTRY-}mmusers
-    build:
-      context: .
-      dockerfile: MMUsers/Dockerfile
+#    build:
+#      context: .
+#      dockerfile: MMUsers/Dockerfile
     ports:
       - 5001:80
     depends_on:
@@ -41,9 +41,9 @@ services:
       
   mmstock:
     image: ${DOCKER_REGISTRY-}mmstock
-    build:
-      context: .
-      dockerfile: MMStock/Dockerfile
+#    build:
+#      context: .
+#      dockerfile: MMStock/Dockerfile
     ports:
       - 5004:80
     depends_on:
@@ -51,9 +51,9 @@ services:
         
   mmgateway:
     image: ${DOCKER_REGISTRY-}mmgateway
-    build:
-      context: .
-      dockerfile: MMGateway/Dockerfile
+#    build:
+#      context: .
+#      dockerfile: MMGateway/Dockerfile
     ports:
       - 8000:80
       - 8010:443
