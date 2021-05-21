@@ -7,13 +7,13 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=1Secure*Password1
     ports:
-    - 80
+    - 1433:80
 
   mmbasket:
     image: ${DOCKER_REGISTRY-}mmbasket
-#    build:
-#      context: .
-#      dockerfile: MMBasket/Dockerfile
+    build:
+      context: .
+      dockerfile: MMBasket/Dockerfile
     ports:
       - 5003:80
     depends_on:
@@ -21,9 +21,9 @@ services:
 
   mmproducts:
     image: ${DOCKER_REGISTRY-}mmproducts
-#    build:
-#      context: .
-#      dockerfile: MMProducts/Dockerfile
+    build:
+      context: .
+      dockerfile: MMProducts/Dockerfile
     ports:
       - 5002:80
     depends_on:
@@ -31,13 +31,23 @@ services:
 
   mmusers:
     image: ${DOCKER_REGISTRY-}mmusers
-#    build:
-#      context: .
-#      dockerfile: MMUsers/Dockerfile
+    build:
+      context: .
+      dockerfile: MMUsers/Dockerfile
     ports:
       - 5001:80
     depends_on:
       - db
+      
+  mmstock:
+    image: ${DOCKER_REGISTRY-}mmstock
+    build:
+      context: .
+      dockerfile: MMStock/Dockerfile
+    ports:
+      - 5004:80
+    depends_on:
+      - db    
         
   mmgateway:
     image: ${DOCKER_REGISTRY-}mmgateway
@@ -47,3 +57,11 @@ services:
     ports:
       - 8000:80
       - 8010:443
+  
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
