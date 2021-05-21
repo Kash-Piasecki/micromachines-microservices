@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using MMStock.Data;
+using MMStock.EventBusConsumer;
 using MMStock.Serivces;
 
 namespace MMStock.Controllers
@@ -12,10 +13,12 @@ namespace MMStock.Controllers
     public class StockController : ControllerBase
     {
         private readonly IStockRepository _stockRepository;
+        private readonly ProductCreationConsumer _consumer;
 
-        public StockController(IStockRepository stockRepository)
+        public StockController(IStockRepository stockRepository, ProductCreationConsumer consumer)
         {
             _stockRepository = stockRepository;
+            _consumer = consumer;
         }
         
         [HttpGet]

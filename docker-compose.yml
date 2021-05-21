@@ -41,9 +41,9 @@ services:
       
   mmstock:
     image: ${DOCKER_REGISTRY-}mmstock
-#    build:
-#      context: .
-#      dockerfile: MMStock/Dockerfile
+    build:
+      context: .
+      dockerfile: MMStock/Dockerfile
     ports:
       - 5004:80
     depends_on:

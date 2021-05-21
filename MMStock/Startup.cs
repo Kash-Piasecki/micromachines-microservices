@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommonLibrary.Helpers;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MMStock.Data;
+using MMStock.EventBusConsumer;
 using MMStock.Serivces;
 
 namespace MMStock
@@ -29,6 +32,22 @@ namespace MMStock
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMassTransit(config =>
+            {
+                config.AddConsumer<ProductCreationConsumer>();
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(Configuration["EventBusSettings:HostAddress"]);
+                    cfg.ReceiveEndpoint(EventBusConstants.ProductCheckoutQueue, c =>
+                    {
+                        c.ConfigureConsumer<ProductCreationConsumer>(ctx);
+                    });
+                });
+            });
+            services.AddMassTransitHostedService();
+
+            services.AddScoped<ProductCreationConsumer>();
+            
             services.AddDbContext<StockContext>(options => options
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(StockContext).Assembly.FullName)));
